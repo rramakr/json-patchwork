@@ -1,5 +1,6 @@
 var _ = require('../common');
 var expand = require('./expand');
+var split = require('./split');
 var intersect = require('./intersect');
 var operator = require('../support/operator');
 
@@ -24,6 +25,9 @@ function test(tests, source, target, sourcePath, targetPath, unresolvedSourcePat
 
     return _.some(test, function(testConfig) {
       var compare = operator(testConfig.operator);
+      var ruleSourcePath = ~testConfig.path.indexOf('@') &&
+        intersect(sourcePath, testConfig.path, unresolvedSourcePath) ||
+        split(testConfig.path);
       var ruleSourcePath = intersect(sourcePath, testConfig.path, unresolvedSourcePath);
       var didExpandSourcePath = false;
       var ruleSourceValue;
